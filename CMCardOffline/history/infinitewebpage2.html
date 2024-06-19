@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local Image Gallery</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    #gallery {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 10px;
+        margin: 20px auto;
+        max-width: 1000px;
+        padding: 0 20px;
+    }
+
+    .image-container {
+        position: relative;
+        overflow: hidden;
+        width: calc(20% - 2px); /* 5 columns with 10px gap */
+        padding-bottom: 133.33%; /* 3:4 aspect ratio */
+        border: 1px solid #ccc;
+    }
+
+    .image-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .loading {
+        text-align: center;
+        margin: 20px 0;
+    }
+</style>
+</head>
+<body>
+
+<input type="file" id="file-input" multiple accept="image/*">
+<div id="gallery"></div>
+
+<script>
+    document.getElementById('file-input').addEventListener('change', function(event) {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = ''; // Clear existing images
+
+        const files = event.target.files;
+        const images = Array.from(files).filter(file => file.type.startsWith('image/'));
+        
+        images.forEach(image => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const container = document.createElement('div');
+                container.classList.add('image-container');
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                container.appendChild(img);
+                gallery.appendChild(container);
+            };
+            reader.readAsDataURL(image);
+        });
+    });
+</script>
+
+</body>
+</html>

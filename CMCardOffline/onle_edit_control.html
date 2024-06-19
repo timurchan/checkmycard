@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resizable Multiline Edit Control</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    textarea {
+        width: 80%;
+        height: 80vh; /* 80% of the viewport height */
+        resize: both; /* Allow both horizontal and vertical resizing */
+        border: 1px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <textarea></textarea>
+</div>
+</body>
+</html>
