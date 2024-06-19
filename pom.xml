@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+<!--	<parent>-->
+<!--		<groupId>org.springframework.boot</groupId>-->
+<!--		<artifactId>spring-boot-starter-parent</artifactId>-->
+<!--		<version>2.7.0</version>-->
+<!--		<relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--	</parent>-->
+
+
+	<repositories>
+		<repository>
+			<id>nc.thirdparty_sync</id>
+			<url>https://nexussrv.netcracker.com/content/repositories/nc.thirdparty_sync/</url>
+		</repository>
+		<repository>
+			<id>nc.general_sync</id>
+			<url>https://nexussrv.netcracker.com/content/repositories/nc.general_sync/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>nc.om.tls</id>
+			<url>https://nexussrv.netcracker.com/content/repositories/nc.om.tls</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>nc.maven.plugins</id>
+			<url>https://nexussrv.netcracker.com/content/repositories/nc.maven.plugins</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>nc.tools</id>
+			<url>https://nexussrv.netcracker.com/content/repositories/nc.tools</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<groupId>com.gtimurchan</groupId>
+	<artifactId>checkmycard</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>checkmycard</name>
+	<description>Check your e-commerce market place card</description>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>2.4.3</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>2.7.9</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+			<version>2.6.6</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+			<version>8.3.0</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<version>2.7.9</version>
+			<type>pom</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.14.3</version> <!-- Use the latest version -->
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+		<!-- HtmlUnitDriver -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>htmlunit-driver</artifactId>
+			<version>2.27</version> <!-- Версия может быть актуальной -->
+		</dependency>
+		<dependency>
+			<groupId>org.w3c.css</groupId>
+			<artifactId>sac</artifactId>
+			<version>1.3</version> <!-- Версия может быть актуальной -->
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.0.1-jre</version> <!-- Or the latest version -->
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+			<version>3.1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.37.0</version> <!-- Replace with the latest version -->
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-devtools</artifactId>-->
+<!--			<version>1.5.6.RELEASE</version>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>8</source>
+					<target>8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

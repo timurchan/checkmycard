@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Gallery</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center; /* Center align text */
+        }
+        img {
+            max-width: 100px; /* Limit image width for display */
+        }
+    </style>
+</head>
+<body>
+<h1>Image Gallery</h1>
+<table>
+    <thead>
+    <tr>
+        <th colspan="5">Images</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="imageUrl, iterStat : ${imageUrls}">
+        <td>
+            <!-- Display the image -->
+            <img th:src="${imageUrl}" alt="Image">
+        </td>
+        <!-- Insert empty cells if less than 5 columns in the last row -->
+        <th:block th:if="${iterStat.index % 5 == 4}">
+    </tr><tr>
+        </th:block>
+    </tr>
+    <tr th:if="${imageUrls.size() % 5 != 0}">
+        <th:block th:each="i : ${#numbers.sequence(imageUrls.size() % 5, 4)}">
+            <td></td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

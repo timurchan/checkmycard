@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image URLs Table</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        img {
+            max-width: 100px; /* Limit image width for display */
+        }
+    </style>
+</head>
+<body>
+<h1>Image URLs</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Image</th>
+        <th>URL</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterate over the collection of image URLs -->
+    <tr th:each="imageUrl : ${imageUrls}">
+        <td>
+            <!-- Display the image -->
+            <img th:src="${imageUrl}" alt="Image">
+        </td>
+        <td>
+            <!-- Display the URL -->
+            <span th:text="${imageUrl}"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

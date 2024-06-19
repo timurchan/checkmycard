@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Form</title>
+    <style>
+        form {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 10px;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Submit Your Request</h1>
+<form th:action="@{/submit-request}" method="post">
+    <input type="text" name="searchString" placeholder="Enter your request" required>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

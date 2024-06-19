@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Table</title>
+    <style>
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+<h2>Image Table</h2>
+<table>
+    <tbody>
+    <!-- Using Thymeleaf iteration to create rows -->
+    <tr th:each="row, rowStat : ${#numbers.sequence(0, ((imageUrls.size() div 5) - 1))}">
+        <!-- Using Thymeleaf iteration to create columns -->
+        <td th:each="col, colStat : ${#numbers.sequence(0, 4)}">
+            <!-- Calculate the index for the current image in the list -->
+            <!-- If there are fewer images than cells, display empty cells -->
+            <img th:src="${imageUrls[(rowStat.index * 5) + colStat.index]}" alt="Image">
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

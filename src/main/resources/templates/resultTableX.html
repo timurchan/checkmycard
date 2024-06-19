@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Image Gallery</title>
+    <link rel="stylesheet" type="text/css" href="/css/product_card2.css">
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    #gallery {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 10px;
+        margin: 20px auto;
+        max-width: 1000px;
+        padding: 0 20px;
+    }
+
+    .image-container {
+        position: relative;
+        overflow: hidden;
+        width: calc(100% - 2px); /* Adjusted width */
+        padding-bottom: 133.33%; /* 3:4 aspect ratio */
+        border: 1px solid #ccc;
+    }
+
+    .image-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    </style>
+</head>
+<body>
+<div id="gallery">
+    <!-- Thymeleaf iteration to populate images -->
+    <div th:each="imageUrl : ${imageUrls}" class="product-card product-card--hoverable j-card-item">
+        <div class="product-card__wrapper">
+            <div class="product-card__img-wrap img-plug j-thumbnail-wrap">
+                <img class="j-thumbnail" th:src="${imageUrl}" width="516" height="688" alt="Image">
+            </div>
+            <div class="product-card__tips product-card__tips--top">
+                <span class="product-card__tip product-card__tip--new" title="Новый товар, поступил в продажу менее 14 дней назад">new</span>
+            </div>
+            <div class="product-card__tips product-card__tips--bottom">
+                <p class="product-card__tip product-card__tip--sale">-75%</p>
+            </div>
+        </div>
+        <div class="product-card__middle-wrap">
+            <script type="jsv#1216_"></script>
+            <p class="product-card__price price">
+                    <span class="price__wrap">
+                        <ins class="price__lower-price wallet-price">193 ₽</ins>
+                        <script type="jsv#1218_"></script>
+                        <del>796 ₽</del>
+                        <script type="jsv/1218_"></script>
+                        <script type="jsv#1219_"></script>
+                        <span class="price__wallet-condition-text">с WB кошельком</span>
+                        <script type="jsv/1219_"></script>
+                    </span>
+            </p>
+            <script type="jsv/1216_"></script>
+            <h2 class="product-card__brand-wrap">
+                    <span class="product-card__brand-container">
+                        <span class="product-card__brand">Dufrain</span>
+                    </span>
+                <span class="product-card__name">Серьги длинные протяжки бижутерия</span>
+            </h2>
+        </div>
+        <div class="product-card__bottom-wrap">
+            <p class="product-card__rating-wrap">
+                <span class="address-rate-mini address-rate-mini--sm">4.8</span>
+                <span class="product-card__count">7 008 оценок</span>
+            </p>
+            <p class="product-card__sizes j-sizes"></p>
+            <p class="product-card__order-wrap" data-link="class{merge: (!paymentDiscountAmount &amp;&amp; currency=='RUB') toggle='no-wallet'}">
+                <a class="product-card__add-basket j-add-to-basket btn-main" href="/lk/basket" data-link="href{:addedToBooking ? '/lk/booking' : '/lk/basket'}                class{merge:(!addedToBasket &amp;&amp; !~isInBasket &amp;&amp; !isItemInBasket) toggle='btn-main'}                class{merge:(addedToBasket || ~isInBasket || isItemInBasket) toggle='btn-base'}                class{merge:(~isInBasket &amp;&amp; addedToBasket) toggle='disabled'}">
+                    <span class="btn-icon__white"></span>
+                    <span class="btn-text">Завтра</span>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="loading" id="loading">Loading...</div>
+</body>
+</html>
