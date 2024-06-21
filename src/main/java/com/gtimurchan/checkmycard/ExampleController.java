@@ -6,12 +6,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @Controller
 public class ExampleController {
+    int counter = 1;
+    String searchString;
+
     // Display the form at the root level
     @GetMapping("/")
     public String showInitialForm() {
@@ -22,29 +28,30 @@ public class ExampleController {
     @PostMapping("/submit-request")
     public String handleRequest(@RequestParam("searchString") String searchString, Model model) {
         LOG.debug("Received request string: {}", searchString);
+        this.searchString = searchString;
 
-        // Process the request string as needed
-        // For example, call a service or perform some logic
-        Collection<String> imageUrls = new ImageExtractor().execute(searchString);
-
-        // Add the image URLs to the model to pass to the view
-        model.addAttribute("imageUrls", imageUrls);
+//        Collection<String> imageUrls = new ImageExtractor().execute(searchString);
+//        model.addAttribute("imageUrls", imageUrls);
 
         // Return the view name to display the results
-        return "resultTableY"; // Ensure you have a result.html Thymeleaf template to display the results
+        return "test2v2";
+        //return "resultTableY";
     }
 
-//
-//    @GetMapping("/")
-//    public String home(Model model) {
-//        LOG.debug("ExampleController start start start");
-//
-//        Collection<String> imageUrls = ImageExtractor.execute();
-////        String htmlPage = HtmlGenerator.generateHtmlPage(imageUrls);
-////        System.out.println(htmlPage);
-////        return htmlPage;
-//
-//        model.addAttribute("imageUrls", imageUrls);
-//        return "example";
-//    }
+    @GetMapping("/load-more-images")
+    @ResponseBody
+    public List<String> loadMoreImages(@RequestParam int offset, @RequestParam int limit) {
+        String updatedUrl = replaceLabelWithValue(Const.WEB_URL_WITH_PAGE, Const.LABEL_TO_CHANGE, counter);
+        System.out.println("updatedUrl = " + updatedUrl);
+        counter++;
+
+
+        Collection<String> imageUrls = new ImageExtractor().execute(updatedUrl, searchString);
+        List<String> listUrls = new ArrayList<>(imageUrls);
+        return listUrls;
+    }
+
+    public static String replaceLabelWithValue(String url, String label, int value) {
+        return url.replace(label, String.valueOf(value));
+    }
 }

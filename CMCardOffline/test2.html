@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf Example</title>
+    <link rel="stylesheet" type="text/css" href="product_card2.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #gallery {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
+            margin: 20px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            width: calc(100% - 2px); /* Adjusted width */
+            padding-bottom: 133.33%; /* 3:4 aspect ratio */
+            border: 1px solid #ccc;
+        }
+
+        .image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div id="gallery"></div>
+<div class="loading" id="loading" style="display: none;">Loading...</div>
+
+<script type="text/javascript">
+		let currentPage = 1;
+		const perPage = 15;
+		let isLoading = false;
+
+		window.addEventListener('scroll', function() {
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !isLoading) {
+				loadMoreImages();
+			}
+		});
+
+		document.addEventListener('DOMContentLoaded', function() {
+            loadMoreImages();
+        });
+
+		function loadMoreImages0() {
+			var gallery = document.getElementById('gallery');
+			var loading = document.getElementById('loading');
+			loading.style.display = 'block';
+			// Simulating loading images
+			setTimeout(function() {
+				for (var i = 0; i < 50; i++) {
+					var img = document.createElement('img');
+					img.src = "https://via.placeholder.com/150";
+					gallery.appendChild(img);
+				}
+				loading.style.display = 'none';
+			}, 1000);
+		}
+
+        function loadMoreImages() {
+            isLoading = true;
+            document.getElementById('loading').style.display = 'block';
+
+            $.ajax({
+                url: '/load-more-images',
+                method: 'GET',
+                data: {
+                    offset: (currentPage - 1) * perPage,
+                    limit: perPage
+                },
+                success: function(data) {
+                    const gallery = document.getElementById('gallery');
+                    data.forEach(url => {
+                        addImageToGallery(url);
+                    });
+
+                    isLoading = false;
+                    document.getElementById('loading').style.display = 'none';
+                    currentPage++;
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error: ", status, error);
+                    isLoading = false;
+                    document.getElementById('loading').style.display = 'none';
+                }
+            });
+        }
+
+
+        function addImageToGalleryTest(url) {
+            const gallery = document.getElementById('gallery');
+            const img = document.createElement('img');
+            img.src = url;
+            gallery.appendChild(img);
+        }
+
+        function addImageToGallery(url) {
+            // Create the article element
+            const article = document.createElement('article');
+            article.setAttribute('data-nm-id', 'dynamic-id');
+            article.setAttribute('id', 'dynamic-id');
+            article.setAttribute('class', 'product-card product-card--hoverable j-card-item');
+            // Create the div with class "product-card__wrapper"
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.classList.add('product-card__wrapper');
+            // Create the div with class "product-card__top-wrap"
+            const topWrapDiv = document.createElement('div');
+            topWrapDiv.classList.add('product-card__top-wrap');
+            // Create the div with class "product-card__img-wrap"
+            const imgWrapDiv = document.createElement('div');
+            imgWrapDiv.classList.add('product-card__img-wrap', 'img-plug', 'j-thumbnail-wrap');
+            // Create the img element
+            const img = document.createElement('img');
+            //img.src = e.target.result;
+            img.classList.add('j-thumbnail');
+            img.setAttribute('width', '516');
+            img.setAttribute('height', '688');
+			img.setAttribute('src', url); //---------------------------------------------------------------------------------------
+            img.setAttribute('alt', 'Серьги длинные протяжки бижутерия Dufrain');
+            counter++;
+            // Append elements to their respective parent elements
+            imgWrapDiv.appendChild(img);
+            const tipsDiv = document.createElement('div');
+            tipsDiv.classList.add('product-card__tips', 'product-card__tips--top');
+            // Create the span element with class "product-card__tip product-card__tip--new" and title attribute
+            const span = document.createElement('span');
+            span.classList.add('product-card__tip', 'product-card__tip--new');
+            span.setAttribute('title', 'Новый товар, поступил в продажу менее 14 дней назад');
+            span.textContent = 'new'; // Set the text content of the span element
+            tipsDiv.appendChild(span);
+            // Create the div element with class "product-card__tips product-card__tips--bottom"
+            const bottomTipsDiv = document.createElement('div');
+            bottomTipsDiv.classList.add('product-card__tips', 'product-card__tips--bottom');
+            // Create the p element with class "product-card__tip product-card__tip--sale"
+            const saleTip = document.createElement('p');
+            saleTip.classList.add('product-card__tip', 'product-card__tip--sale');
+            saleTip.textContent = '-75%'; // Set the text content of the p element
+            // Append the saleTip paragraph to the bottomTipsDiv
+            bottomTipsDiv.appendChild(saleTip);
+            topWrapDiv.appendChild(imgWrapDiv);
+            topWrapDiv.appendChild(tipsDiv);
+            topWrapDiv.appendChild(bottomTipsDiv);
+            // Create the div element with class "product-card__middle-wrap"
+            const middleWrapDiv = document.createElement('div');
+            middleWrapDiv.classList.add('product-card__middle-wrap');
+            // Create the script element with type "jsv#1216_"
+            const scriptBefore = document.createElement('script');
+            scriptBefore.setAttribute('type', 'jsv#1216_');
+            // Create the p element with class "product-card__price price"
+            const pricePTag = document.createElement('p');
+            pricePTag.classList.add('product-card__price', 'price');
+            // Create the span element with class "price__wrap"
+            const priceWrapSpan = document.createElement('span');
+            priceWrapSpan.classList.add('price__wrap');
+            // Create the ins element with class "price__lower-price wallet-price" and inner text "193 ₽"
+            const insTag = document.createElement('ins');
+            insTag.classList.add('price__lower-price', 'wallet-price');
+            insTag.innerText = '193 ₽';
+            // Create the script element with type "jsv#1218_"
+            const scriptBeforeDel = document.createElement('script');
+            scriptBeforeDel.setAttribute('type', 'jsv#1218_');
+            // Create the del element with inner text "796 ₽"
+            const delTag = document.createElement('del');
+            delTag.innerText = '796 ₽';
+            // Create the script element with type "jsv/1218_"
+            const scriptAfterDel = document.createElement('script');
+            scriptAfterDel.setAttribute('type', 'jsv/1218_');
+            // Create the script element with type "jsv#1219_"
+            const scriptBeforeSpan = document.createElement('script');
+            scriptBeforeSpan.setAttribute('type', 'jsv#1219_');
+            // Create the span element with class "price__wallet-condition-text" and inner text "с WB кошельком"
+            const walletSpan = document.createElement('span');
+            walletSpan.classList.add('price__wallet-condition-text');
+            walletSpan.innerText = 'с WB кошельком';
+            // Create the script element with type "jsv/1219_"
+            const scriptAfterSpan = document.createElement('script');
+            scriptAfterSpan.setAttribute('type', 'jsv/1219_');
+            // Append ins, scriptBeforeDel, delTag, scriptAfterDel, scriptBeforeSpan, walletSpan, and scriptAfterSpan elements to the priceWrapSpan
+            priceWrapSpan.appendChild(insTag);
+            priceWrapSpan.appendChild(scriptBeforeDel);
+            priceWrapSpan.appendChild(delTag);
+            priceWrapSpan.appendChild(scriptAfterDel);
+            priceWrapSpan.appendChild(scriptBeforeSpan);
+            priceWrapSpan.appendChild(walletSpan);
+            priceWrapSpan.appendChild(scriptAfterSpan);
+            // Append priceWrapSpan to the pricePTag
+            pricePTag.appendChild(priceWrapSpan);
+            // Create the script element with type "jsv/1216_"
+            const scriptAfter = document.createElement('script');
+            scriptAfter.setAttribute('type', 'jsv/1216_');
+            // Create the h2 element with class "product-card__brand-wrap"
+            const brandH2Tag = document.createElement('h2');
+            brandH2Tag.classList.add('product-card__brand-wrap');
+            // Create the span element with class "product-card__brand-container"
+            const brandContainerSpan = document.createElement('span');
+            brandContainerSpan.classList.add('product-card__brand-container');
+            // Create the span element with class "product-card__brand" and inner text "Dufrain"
+            const brandSpan = document.createElement('span');
+            brandSpan.classList.add('product-card__brand');
+            brandSpan.innerText = 'Dufrain';
+            // Append brandSpan to the brandContainerSpan
+            brandContainerSpan.appendChild(brandSpan);
+            // Create the span element with class "product-card__name" and inner text "Серьги длинные протяжки бижутерия"
+            const nameSpan = document.createElement('span');
+            nameSpan.classList.add('product-card__name');
+            nameSpan.innerText = 'Серьги длинные протяжки бижутерия';
+            // Append brandContainerSpan and nameSpan to the brandH2Tag
+            brandH2Tag.appendChild(brandContainerSpan);
+            brandH2Tag.appendChild(nameSpan);
+            // Append scriptBefore, pricePTag, scriptAfter, and brandH2Tag to the middleWrapDiv
+            middleWrapDiv.appendChild(scriptBefore);
+            middleWrapDiv.appendChild(pricePTag);
+            middleWrapDiv.appendChild(scriptAfter);
+            middleWrapDiv.appendChild(brandH2Tag);
+            // Create the div element with class "product-card__bottom-wrap"
+            const bottomWrapDiv = document.createElement('div');
+            bottomWrapDiv.classList.add('product-card__bottom-wrap');
+            // Create the p element with class "product-card__rating-wrap"
+            const ratingWrapPTag = document.createElement('p');
+            ratingWrapPTag.classList.add('product-card__rating-wrap');
+            // Create the span element with class "address-rate-mini address-rate-mini--sm" and inner text "4.8"
+            const rateMiniSpan = document.createElement('span');
+            rateMiniSpan.classList.add('address-rate-mini', 'address-rate-mini--sm');
+            rateMiniSpan.innerText = '4.8';
+            // Create the span element with class "product-card__count" and inner text "7 008 оценок"
+            const countSpan = document.createElement('span');
+            countSpan.classList.add('product-card__count');
+            countSpan.innerText = '7 008 оценок';
+            // Append rateMiniSpan and countSpan to the ratingWrapPTag
+            ratingWrapPTag.appendChild(rateMiniSpan);
+            ratingWrapPTag.appendChild(countSpan);
+            // Append ratingWrapPTag to the bottomWrapDiv
+            bottomWrapDiv.appendChild(ratingWrapPTag);
+            // Create the p element with class "product-card__sizes j-sizes"
+            const sizesPTag = document.createElement('p');
+            sizesPTag.classList.add('product-card__sizes', 'j-sizes');
+            // Append sizesPTag to the bottomWrapDiv
+            bottomWrapDiv.appendChild(sizesPTag);
+            // Create the p element with class "product-card__order-wrap" and data-link attribute
+            const orderWrapPTag = document.createElement('p');
+            orderWrapPTag.classList.add('product-card__order-wrap');
+            orderWrapPTag.setAttribute('data-link', 'class{merge: (!paymentDiscountAmount && currency==\'RUB\') toggle=\'no-wallet\'}');
+            // Create the a element with class "product-card__add-basket j-add-to-basket btn-main" and href attribute
+            const basketLink = document.createElement('a');
+            basketLink.classList.add('product-card__add-basket', 'j-add-to-basket', 'btn-main');
+            basketLink.setAttribute('href', "/lk/basket");
+            basketLink.setAttribute('data-link', "href{:addedToBooking ? '/lk/booking' : '/lk/basket'}                class{merge:(!addedToBasket && !~isInBasket && !isItemInBasket) toggle='btn-main'}                class{merge:(addedToBasket || ~isInBasket || isItemInBasket) toggle='btn-base'}                class{merge:(~isInBasket && addedToBasket) toggle='disabled'}");
+            // Create the span element with class "btn-icon__white"
+            const iconSpan = document.createElement('span');
+            iconSpan.classList.add('btn-icon__white');
+            // Create the span element with class "btn-text" and inner text "Завтра"
+            const textSpan = document.createElement('span');
+            textSpan.classList.add('btn-text');
+            textSpan.innerText = 'Завтра';
+            // Create the img element
+            const imgElement = document.createElement('img');
+            imgElement.src = 'https://cdn-icons-png.flaticon.com/128/3916/3916611.png'; // Set the src attribute
+            imgElement.setAttribute('loading', 'lazy'); // Set the loading attribute
+            imgElement.alt = 'Envelope free interface icon'; // Set the alt attribute
+            imgElement.title = 'Envelope free interface icon'; // Set the title attribute
+            //imgElement.width = 64; // Set the width attribute
+            //imgElement.height = 64; // Set the height attribute
+            // Append iconSpan and textSpan to the basketLink
+            basketLink.appendChild(iconSpan);
+            //basketLink.appendChild(imgElement);
+            basketLink.appendChild(textSpan);
+            // Append basketLink to the orderWrapPTag
+            orderWrapPTag.appendChild(basketLink);
+            // Append orderWrapPTag to the bottomWrapDiv
+            bottomWrapDiv.appendChild(orderWrapPTag);
+            wrapperDiv.appendChild(topWrapDiv);
+            wrapperDiv.appendChild(middleWrapDiv);
+            wrapperDiv.appendChild(bottomWrapDiv);
+            article.appendChild(wrapperDiv);
+            gallery.appendChild(article);
+        }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf Example</title>
+</head>
+<body>
+<div id="gallery"></div>
+<div class="loading" id="loading" style="display: none;">Loading...</div>
+
+<script type="text/javascript">
+		let currentPage = 1;
+		const perPage = 15;
+		let isLoading = false;
+
+		window.addEventListener('scroll', function() {
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && !isLoading) {
+				loadMoreImages();
+			}
+		});
+		
+		document.addEventListener('DOMContentLoaded', function() {
+            loadMoreImages();
+        });
+
+		function loadMoreImages() {
+			var gallery = document.getElementById('gallery');
+			var loading = document.getElementById('loading');
+			loading.style.display = 'block';
+			// Simulating loading images
+			setTimeout(function() {
+				for (var i = 0; i < 5; i++) {
+					var img = document.createElement('img');
+					img.src = "https://via.placeholder.com/150";
+					gallery.appendChild(img);
+				}
+				loading.style.display = 'none';
+			}, 1000);
+		}
+
+
+
+    </script>
+</body>
+</html>
