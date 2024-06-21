@@ -68,15 +68,14 @@ public class ImageExtractor {
         return output;
     }
 
-    public Collection<String> execute(String searchString) {
+
+    public Collection<String> execute(String inputUrl, String searchString) {
         try {
-//            String WEB_URL = Const.WEB_URL + searchString;
-            String WEB_URL = "https://www.wildberries.ru/catalog/0/search.aspx?search=" + searchString;
+            String url = inputUrl + searchString;
+            LOG.debug("Processed url: {}", url);
+            System.out.println("Processed url: " + url);
 
-            LOG.debug("WEB_URL: {}", WEB_URL);
-            System.out.println("WEB_URL: " + WEB_URL);
-
-            Collection<String> imageUrls = extractImageUrls(WEB_URL);
+            Collection<String> imageUrls = extractImageUrls(url);
 //            Collection<String> imageUrls = emulateImageExtracting();
             System.out.println("imageUrls: " + imageUrls);
 
@@ -88,6 +87,10 @@ public class ImageExtractor {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Collection<String> execute(String searchString) {
+        return execute(Const.WEB_URL, searchString);
     }
 
     private Collection<String> emulateImageExtracting() throws  IOException {
