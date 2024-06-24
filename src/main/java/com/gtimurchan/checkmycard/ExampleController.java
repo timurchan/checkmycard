@@ -1,6 +1,6 @@
 package com.gtimurchan.checkmycard;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Slf4j
 @Controller
 public class ExampleController {
     int counter = 1;
     String searchString;
+    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(ImageExtractor.class);
 
     // Display the form at the root level
     @GetMapping("/")

@@ -17,8 +17,8 @@ public class ImageExtractor {
         Collection<String> imageUrls = new ArrayList<>();
 
 //        IWebPageScraper pageScraper = new WebPageScraper_HtmlUnitDriver(url);
-        IWebPageScraper pageScraper = new WebPageScraper_ChromeDriver(url);
-        imageUrls = pageScraper.execute();
+        IWebPageScraper pageScraper = new WebPageScraper_ChromeDriver();
+        imageUrls = pageScraper.execute(url);
 
 
         LOG.debug("imageUrls {}", imageUrls);

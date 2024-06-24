@@ -98,7 +98,7 @@ public class WebPageScraper2_1 implements IWebPageScraper {
     }
 
     @Override
-    public Collection<String> execute() {
+    public Collection<String> execute(String url) {
         f();
         return null;
     }

@@ -14,6 +14,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+
 import static org.junit.Assert.assertTrue;
 
 public class ChromeDriverTest2 {
@@ -35,7 +38,7 @@ public class ChromeDriverTest2 {
         driver.get(Const.WEB_URL);
 
         // Wait for the dynamic content to load (adjust timeout as needed)
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.of(30, ChronoUnit.SECONDS));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div#catalog")));
 
         // Get the updated HTML content

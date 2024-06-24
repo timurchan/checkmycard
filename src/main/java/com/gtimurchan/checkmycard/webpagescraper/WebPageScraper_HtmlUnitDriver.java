@@ -11,6 +11,8 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,15 +56,15 @@ public class WebPageScraper_HtmlUnitDriver implements IWebPageScraper {
 
 
     @Override
-    public Collection<String> execute() {
+    public Collection<String> execute(String url) {
         // Инициализация HtmlUnitDriver
         WebDriver driver = new HtmlUnitDriver();
 
         // Открытие веб-страницы
-        driver.get(url);
+        driver.get(this.url);
 
         // Явное ожидание загрузки элемента
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.of(30, ChronoUnit.SECONDS));
         String str = catalogSelector;
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(catalogSelector)));

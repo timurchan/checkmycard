@@ -1,6 +1,7 @@
 package com.gtimurchan.checkmycard.webpagescraper;
 
 import com.gtimurchan.checkmycard.Const;
+import com.gtimurchan.checkmycard.ImageExtractor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,11 +11,19 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 
+import java.net.InetAddress;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,22 +31,44 @@ import java.util.List;
 public class WebPageScraper_ChromeDriver implements IWebPageScraper {
     WebDriver driver;
     String url;
+    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(ImageExtractor.class);
 
     final String catalogSelector = "div#catalog";
     final String imgSelector = "div.product-card__img-wrap > img.j-thumbnail";
 
-    public WebPageScraper_ChromeDriver(String url) {
-        this.url = url;
+    @Value("${chrome_driver.path}")
+    private String chromeDriverPath;
+
+    @Autowired
+    private Environment environment;
+
+    public WebPageScraper_ChromeDriver() {
+        //this.url = url;
         System.setProperty("webdriver.chrome.driver", Const.PATH_TO_CHROME_DRIVER);
+        String allowedIps;
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // Run Chrome in headless mode
-        options.addArguments("--disable-gpu"); // applicable to windows os only
-        options.addArguments("--no-sandbox"); // Bypass OS security model, MUST BE THE VERY FIRST OPTION
-        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-        driver = new ChromeDriver(options);
+        try {
+            ChromeDriverService service = new ChromeDriverService.Builder()
+                    .usingAnyFreePort()
+                    .withWhitelistedIps("192.168.1.2")
+                    .build();
+
+            InetAddress address = InetAddress.getLocalHost();
+            LOG.debug("My IP-address: " + address.getHostAddress());
+            allowedIps = "--allowed-ips=" + address.getHostAddress();
+            LOG.debug("Allowed IPs option: {}", allowedIps);
+
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless"); // Run Chrome in headless mode
+            options.addArguments("--disable-gpu"); // applicable to windows os only
+            options.addArguments("--no-sandbox"); // Bypass OS security model, MUST BE THE VERY FIRST OPTION
+            options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+            //options.addArguments(allowedIps);
+            driver = new ChromeDriver(service, options);
+        } catch (Exception e) {
+            LOG.debug("Error ---> {}", e.getMessage());
+        }
     }
-
 
     private List<String> scrapData(String htmlContent) {
         List<String> imageUrls = new ArrayList<>();
@@ -73,12 +104,12 @@ public class WebPageScraper_ChromeDriver implements IWebPageScraper {
         js.executeScript("window.scrollBy(0, -document.body.scrollHeight)");
     }
 
-    public Collection<String> execute() {
+    public Collection<String> execute(String url) {
 
         driver.get(url);
         driver.manage().window().fullscreen();
 
-        WebDriverWait wait = new WebDriverWait(driver, 30);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.of(30, ChronoUnit.SECONDS));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(catalogSelector)));
 
         List<WebElement> catalogElements = driver.findElements(By.cssSelector(catalogSelector));
@@ -103,7 +134,7 @@ public class WebPageScraper_ChromeDriver implements IWebPageScraper {
             final int imageAmountToCompare = imageAmount;
 
             try {
-                wait = new WebDriverWait(driver, 3);
+                wait = new WebDriverWait(driver, Duration.of(3, ChronoUnit.SECONDS));
                 wait.until(new ExpectedCondition<Boolean>() {
                     @Override
                     public Boolean apply(WebDriver driver) {

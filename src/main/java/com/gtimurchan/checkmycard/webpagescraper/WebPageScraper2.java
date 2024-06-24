@@ -118,11 +118,11 @@ public class WebPageScraper2 implements IWebPageScraper {
         throw new RuntimeException("Timeout waiting for element with CSS selector: " + cssSelector);
     }
 
-    public Collection<String> execute() {
+    public Collection<String> execute(String url) {
         Collection<String> imageUrls = new ArrayList<>();
 
         try {
-            HtmlPage page = client.getPage(url);
+            HtmlPage page = client.getPage(this.url);
             // Wait for the catalog section to be visible (if necessary)
             client.waitForBackgroundJavaScript(10000); // Wait for JavaScript to execute
             System.out.println("after 1-st wait");
@@ -130,7 +130,7 @@ public class WebPageScraper2 implements IWebPageScraper {
             System.out.println("after waitUntilElementVisible");
             // Fetch the web page
 
-            page = client.getPage(url);
+            page = client.getPage(this.url);
 
 
             // Get the updated HTML content
@@ -166,7 +166,7 @@ public class WebPageScraper2 implements IWebPageScraper {
 
                 final int imageAmountToCompare = imageAmount;
 
-                page = client.getPage(url);
+                page = client.getPage(this.url);
 
                 // Get the updated HTML content
                 htmlContent = page.asXml();
@@ -201,7 +201,7 @@ public class WebPageScraper2 implements IWebPageScraper {
                 Thread.sleep(10000); // Adjust as needed
 
                 // Re-fetch the page
-                page = client.getPage(url);
+                page = client.getPage(this.url);
 
                 // Get the updated HTML content
                 htmlContent = page.asXml();
