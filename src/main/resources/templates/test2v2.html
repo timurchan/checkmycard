@@ -79,7 +79,7 @@
             document.getElementById('loading').style.display = 'block';
 
             $.ajax({
-                url: '/load-more-images',
+                url: '/load-more-images-async',
                 method: 'GET',
                 data: {
                     offset: (currentPage - 1) * perPage,

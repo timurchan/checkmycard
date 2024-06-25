@@ -1,44 +1,14 @@
-package com.gtimurchan.checkmycard;
-
-import com.gtimurchan.checkmycard.webpagescraper.IWebPageScraper;
-import com.gtimurchan.checkmycard.webpagescraper.WebPageScraper_ChromeDriver;
-import org.slf4j.Logger;
+package com.gtimurchan.checkmycard.imageextractor;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class ImageExtractor {
-
-    private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(ImageExtractor.class);
-
-    public Collection<String> extractImageUrls(String url) throws IOException {
-        Collection<String> imageUrls = new ArrayList<>();
-
-//        IWebPageScraper pageScraper = new WebPageScraper_HtmlUnitDriver(url);
-        IWebPageScraper pageScraper = new WebPageScraper_ChromeDriver(url);
-        imageUrls = pageScraper.execute();
+public class AbstractImageExtractor {
 
 
-        LOG.debug("imageUrls {}", imageUrls);
-
-        return imageUrls;
-    }
-
-    private String extractImageUrl(String html) {
-        // Define regular expression pattern to extract image URLs
-        Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
-        Matcher matcher = pattern.matcher(html);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return null;
-    }
-
-//    imageUrls.add("/img/local-image.jpg");  // Локальное изображение
+    //    imageUrls.add("/img/local-image.jpg");  // Локальное изображение
 //    imageUrls.add("https://example.com/image1.jpg");
-    private Collection<String> enrichWithCustomImage(Collection<String> imageUrls) {
+    protected Collection<String> enrichWithCustomImage(Collection<String> imageUrls) {
         final int cycleNumber = 10;
         Random random = new Random();
 
@@ -51,15 +21,15 @@ public class ImageExtractor {
         int randomNumber = random.nextInt(cycleNumber);
         System.out.println("randomNumber: " + randomNumber);
 
-        for(String imageUrl : imageUrls) {
-            if(counter == randomNumber) {
+        for (String imageUrl : imageUrls) {
+            if (counter == randomNumber) {
                 output.add(custom_image_path);
             } else {
                 output.add(imageUrl);
             }
             counter++;
-            if(counter==cycleNumber) {
-                counter=0;
+            if (counter == cycleNumber) {
+                counter = 0;
                 randomNumber = random.nextInt(cycleNumber);
                 System.out.println("randomNumber: " + randomNumber);
             }
@@ -69,31 +39,8 @@ public class ImageExtractor {
     }
 
 
-    public Collection<String> execute(String inputUrl, String searchString) {
-        try {
-            String url = inputUrl + searchString;
-            LOG.debug("Processed url: {}", url);
-            System.out.println("Processed url: " + url);
 
-            Collection<String> imageUrls = extractImageUrls(url);
-//            Collection<String> imageUrls = emulateImageExtracting();
-            System.out.println("imageUrls: " + imageUrls);
-
-            imageUrls = enrichWithCustomImage(imageUrls);
-            System.out.println("imageUrls: " + imageUrls);
-
-            return imageUrls;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Collection<String> execute(String searchString) {
-        return execute(Const.WEB_URL, searchString);
-    }
-
-    private Collection<String> emulateImageExtracting() throws  IOException {
+    protected Collection<String> emulateImageExtracting() throws IOException {
         String[] urlsArray = {
                 "https://basket-06.wbbasket.ru/vol1026/part102614/102614258/images/c516x688/1.jpg"
                 , "https://basket-12.wbbasket.ru/vol1708/part170882/170882655/images/c516x688/1.jpg"

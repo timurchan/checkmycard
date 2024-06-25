@@ -19,58 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class WebPageScraper_ChromeDriver implements IWebPageScraper {
-    WebDriver driver;
+public class WebPageScraper_ChromeDriver extends WebPageScraper_AbstractChromeDriver {
     String url;
-
-    final String catalogSelector = "div#catalog";
-    final String imgSelector = "div.product-card__img-wrap > img.j-thumbnail";
 
     public WebPageScraper_ChromeDriver(String url) {
         this.url = url;
-        System.setProperty("webdriver.chrome.driver", Const.PATH_TO_CHROME_DRIVER);
-
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // Run Chrome in headless mode
-        options.addArguments("--disable-gpu"); // applicable to windows os only
-        options.addArguments("--no-sandbox"); // Bypass OS security model, MUST BE THE VERY FIRST OPTION
-        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-        driver = new ChromeDriver(options);
-    }
-
-
-    private List<String> scrapData(String htmlContent) {
-        List<String> imageUrls = new ArrayList<>();
-
-        // Parse the HTML content using Jsoup
-        Document doc = Jsoup.parse(htmlContent);
-
-        Elements elements = doc.select(imgSelector);
-
-        for (Element element : elements) {
-
-            Elements thumbnailElements = element.select(".j-thumbnail");
-
-            // Iterate over the found elements
-            for (Element thumbnailElement : thumbnailElements) {
-                // Extract the 'src' attribute value from each element
-                String srcValue = thumbnailElement.attr("src");
-//                System.out.println("src value: " + srcValue);
-                imageUrls.add(srcValue);
-            }
-        }
-
-        return imageUrls;
-    }
-
-    private static void scrollDown(WebDriver driver) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(0, document.body.scrollHeight)");
-    }
-
-    public static void scrollUp(WebDriver driver) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(0, -document.body.scrollHeight)");
     }
 
     public Collection<String> execute() {
@@ -142,7 +95,7 @@ public class WebPageScraper_ChromeDriver implements IWebPageScraper {
         return imageUrls;
     }
 
-    List<String> scrapImages2() {
+    private List<String> scrapImages2() {
         List<WebElement> elementsX = driver.findElements(By.cssSelector(imgSelector));
         System.out.println("elementsX size " + elementsX.size());
 
