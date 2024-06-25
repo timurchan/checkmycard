@@ -4,22 +4,31 @@ import com.gtimurchan.checkmycard.imageextractor.ImageExtractor;
 import com.gtimurchan.checkmycard.imageextractor.ImageExtractorAsync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Controller
 public class ExampleController {
     private static final Logger LOG = LoggerFactory.getLogger(ExampleController.class);
+
+    @Value("${upload.directory}")
+    private String uploadDirectory;
 
     int counter = 1;
     String searchString;
@@ -38,7 +47,7 @@ public class ExampleController {
         LOG.debug("Received request string: {}", searchString);
         this.searchString = searchString;
 
-        if(imageExtractorAsync != null) {
+        if (imageExtractorAsync != null) {
             imageExtractorAsync.shutdown();
             imageExtractorAsync = null;
         }
@@ -72,5 +81,42 @@ public class ExampleController {
         }
 
         return imageExtractorAsync.getImageUrls();
+    }
+
+
+    @PostMapping("/upload-image")
+    @ResponseBody
+    public ImageResponse uploadImage(@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+        // Ensure the upload directory exists
+        File uploadDir = new File(uploadDirectory);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        // Save the uploaded file
+        String fileName = imageFile.getOriginalFilename();
+        Path filePath = Paths.get(uploadDirectory, fileName);
+        Files.write(filePath, imageFile.getBytes());
+        System.out.println("file was uploaded : " + filePath.toString());
+
+        // Return the URL of the uploaded image
+        String imageUrl = "/images/" + fileName;
+        return new ImageResponse(imageUrl);
+    }
+
+    public static class ImageResponse {
+        private String imageData;
+
+        public ImageResponse(String imageData) {
+            this.imageData = imageData;
+        }
+
+        public String getImageData() {
+            return imageData;
+        }
+
+        public void setImageData(String imageData) {
+            this.imageData = imageData;
+        }
     }
 }

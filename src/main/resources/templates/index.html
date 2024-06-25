@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Request Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         form {
             width: 50%;
@@ -19,13 +20,51 @@
         input[type="submit"] {
             padding: 10px 20px;
         }
+
     </style>
 </head>
 <body>
-<h1>Submit Your Request</h1>
-<form th:action="@{/submit-request}" method="post">
-    <input type="text" name="searchString" placeholder="Enter your request" required>
-    <input type="submit" value="Submit">
-</form>
+    <h1>Submit Your Request</h1>
+    <form th:action="@{/submit-request}" method="post">
+        <input type="text" name="searchString" placeholder="Enter your request" required>
+        <input type="submit" value="Submit">
+    </form>
+
+
+    <!-- Image upload form -->
+    <form id="imageUploadForm" enctype="multipart/form-data">
+        <input type="file" id="imageFile" name="imageFile">
+        <button type="button" id="uploadBtn">Upload Image</button>
+        <br><br>
+        <img id="thumbnail" src="#" alt="Image Preview" style="display: none;">
+    </form>
+
+    <!-- Thumbnail display -->
+    <div id="thumbnailContainer"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#uploadBtn').click(function() {
+                var formData = new FormData();
+                var imageFile = $('#imageFile')[0].files[0];
+                formData.append('imageFile', imageFile);
+
+                $.ajax({
+                    url: '/upload-image',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        $('#thumbnail').attr('src', data.imageUrl).css('display', 'block');
+                        console.log("Image URL:", data.imageUrl);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error uploading image:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
