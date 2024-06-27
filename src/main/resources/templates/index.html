@@ -56,7 +56,10 @@
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        $('#thumbnail').attr('src', data.imageUrl).css('display', 'block');
+                        $('#thumbnail').attr('src', data.imageUrl)
+                       .attr('width', '244')
+                       .attr('height', '346')
+                       .css('display', 'block');
                         console.log("Image URL:", data.imageUrl);
                     },
                     error: function(xhr, status, error) {

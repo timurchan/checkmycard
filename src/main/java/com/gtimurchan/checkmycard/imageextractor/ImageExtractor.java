@@ -1,12 +1,12 @@
 package com.gtimurchan.checkmycard.imageextractor;
 
-import com.gtimurchan.checkmycard.Const;
 import com.gtimurchan.checkmycard.webpagescraper.IWebPageScraper;
 import com.gtimurchan.checkmycard.webpagescraper.WebPageScraper_ChromeDriver;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,8 +43,8 @@ public class ImageExtractor extends AbstractImageExtractor {
             LOG.debug("Processed url: {}", url);
             System.out.println("Processed url: " + url);
 
-            Collection<String> imageUrls = extractImageUrls(url);
-//            Collection<String> imageUrls = emulateImageExtracting();
+//            Collection<String> imageUrls = extractImageUrls(url);
+            Collection<String> imageUrls = emulateImageExtracting();
             System.out.println("imageUrls: " + imageUrls);
 
             imageUrls = enrichWithCustomImage(imageUrls);

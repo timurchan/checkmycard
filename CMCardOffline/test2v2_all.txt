@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Thymeleaf Example</title>
-    <link rel="stylesheet" type="text/css" href="product_card2.css">
+    <link rel="stylesheet" type="text/css" href="product_card.css">
     <style>
         body {
             font-family: Arial, sans-serif;

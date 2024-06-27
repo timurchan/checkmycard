@@ -37,7 +37,7 @@ public class WebPageScraper_ChromeDriverAsync  extends WebPageScraper_AbstractCh
 
     @Override
     public Collection<String> execute() {
-        for(int i = 0; i < 10; i ++) {
+        for(int i = 0; i < 3; i ++) {
             executeOneStep();
         }
 

@@ -4,16 +4,23 @@ import java.io.IOException;
 import java.util.*;
 
 public class AbstractImageExtractor {
+    protected String theLastUploadedImageFilePath = "";
 
 
     //    imageUrls.add("/img/local-image.jpg");  // Локальное изображение
 //    imageUrls.add("https://example.com/image1.jpg");
     protected Collection<String> enrichWithCustomImage(Collection<String> imageUrls) {
-        final int cycleNumber = 10;
+        final int cycleNumber = 15;
         Random random = new Random();
 
-        String custom_image_name = "ksenia_timur_green-2.jpg";
-        String custom_image_path = "/img/" + custom_image_name;
+//        String custom_image_name = "green.jpg";
+//        String custom_image_path = "/img/" + custom_image_name;
+
+        String custom_image_path = "img/green.jpg";
+        if (theLastUploadedImageFilePath != null && !theLastUploadedImageFilePath.isEmpty()) {
+            custom_image_path = theLastUploadedImageFilePath;
+        }
+        System.out.println("custom_image_path: " + custom_image_path);
 
         Collection<String> output = new ArrayList<>();
 
@@ -37,7 +44,6 @@ public class AbstractImageExtractor {
 
         return output;
     }
-
 
 
     protected Collection<String> emulateImageExtracting() throws IOException {

@@ -31,6 +31,7 @@ public class ExampleController {
     private String uploadDirectory;
 
     int counter = 1;
+    String theLastUploadedImageFilePath;
     String searchString;
     //    ImageQueueManager imageQueueManager;
     ImageExtractorAsync imageExtractorAsync;
@@ -75,6 +76,7 @@ public class ExampleController {
         if (imageExtractorAsync == null) {
             System.out.println("create ImageExtractorAsync...");
             imageExtractorAsync = new ImageExtractorAsync();
+            imageExtractorAsync.setTheLastUploadedImageFilePath(theLastUploadedImageFilePath);
             imageExtractorAsync.execute(searchString);
         } else {
             System.out.println("ImageExtractorAsync is already created. get images");
@@ -98,25 +100,29 @@ public class ExampleController {
         Path filePath = Paths.get(uploadDirectory, fileName);
         Files.write(filePath, imageFile.getBytes());
         System.out.println("file was uploaded : " + filePath.toString());
+        System.out.println("return fileName : " + fileName);
 
         // Return the URL of the uploaded image
-        String imageUrl = "/images/" + fileName;
-        return new ImageResponse(imageUrl);
+//        String imageUrl = "/img/" + fileName;
+//        return new ImageResponse(imageUrl);
+
+        theLastUploadedImageFilePath = fileName;//filePath.toString();
+        return new ImageResponse(fileName);
     }
 
     public static class ImageResponse {
-        private String imageData;
+        private String imageUrl;
 
         public ImageResponse(String imageData) {
-            this.imageData = imageData;
+            this.imageUrl = imageData;
         }
 
-        public String getImageData() {
-            return imageData;
+        public String getImageUrl() {
+            return imageUrl;
         }
 
-        public void setImageData(String imageData) {
-            this.imageData = imageData;
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
         }
     }
 }

@@ -6,6 +6,7 @@ import com.gtimurchan.checkmycard.webpagescraper.IWebPageScraper;
 import com.gtimurchan.checkmycard.webpagescraper.WebPageScraper_ChromeDriverAsync;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,19 +24,36 @@ public class ImageExtractorAsync extends AbstractImageExtractor {
         imageQueueManager = new ImageQueueManager();
     }
 
+    public void setTheLastUploadedImageFilePath(String theLastUploadedImageFilePath) {
+        this.theLastUploadedImageFilePath = theLastUploadedImageFilePath;
+    }
+
     public void execute(String searchString) {
+        boolean emaulate = true;
 
-        // Create an ExecutorService with a fixed thread pool size
-        executor = Executors.newFixedThreadPool(1);
+        if(emaulate) {
+            try {
+                Collection<String> imageUrls = emulateImageExtracting();
+                Collection<ImageInfo> images = imageUrls.stream()
+                        .map(ImageInfo::new)
+                        .collect(Collectors.toList());
+                imageQueueManager.addElements(images);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Create an ExecutorService with a fixed thread pool size
+            executor = Executors.newFixedThreadPool(1);
 
-        // Submit a task to the executor
-        executor.submit(() -> {
-            // Define the task you want to execute
-            collectImages(searchString);
-        });
+            // Submit a task to the executor
+            executor.submit(() -> {
+                // Define the task you want to execute
+                collectImages(searchString);
+            });
 
-        // Shutdown the executor once all tasks are completed
-        executor.shutdown();
+            // Shutdown the executor once all tasks are completed
+            executor.shutdown();
+        }
     }
 
     private void collectImages(String searchString) {
@@ -59,9 +77,12 @@ public class ImageExtractorAsync extends AbstractImageExtractor {
     }
 
     public void shutdown() {
-        System.out.printf("Start ImageExtractorAsync::shutdownNow(): " + executor.isShutdown());
-        executor.shutdownNow();
-        System.out.printf("End ImageExtractorAsync::shutdownNow(): " + executor.isShutdown());
-        System.out.println("xxx");
+        if(executor != null) {
+            System.out.printf("Start ImageExtractorAsync::shutdownNow(): " + executor.isShutdown());
+            executor.shutdownNow();
+            System.out.printf("End ImageExtractorAsync::shutdownNow(): " + executor.isShutdown());
+        } else {
+            System.out.println("executor is null. Do nothing");
+        }
     }
 }
