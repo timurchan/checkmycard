@@ -29,7 +29,7 @@ public class ImageExtractorAsync extends AbstractImageExtractor {
     }
 
     public void execute(String searchString) {
-        boolean emaulate = true;
+        boolean emaulate = false;
 
         if(emaulate) {
             try {
