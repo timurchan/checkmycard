@@ -1,0 +1,50 @@
+sudo docker ps - проверить статус по работающим контейнерам
+
+
+sudo docker container ps -a		какие есть контейнеры
+
+
+sudo docker image ls			какие есть имеджы
+
+
+
+
+sudo docker run -d -p 80:8091 --name checkmycard a88236/checkmycard
+ - попытка запустить новый контейнер
+
+В общем, не нужно удалять контейнер и потом запускать новый. Можно просто запустить существующий:
+sudo docker start checkmycard
+
+не зпустится если был контнейнер с тем же именем
+удалить прежний: sudo docker container rm XXXXXXX
+
+
+sudo docker exec -it checkmycard bash
+
+exit
+
+sudo docker logs -f checkmycard
+
+
+
+
+
+
+
+http://ec2-35-171-88-255.compute-1.amazonaws.com/	
+Завёл тебе пользователя 
+https://767397770324.signin.aws.amazon.com/console
+Timurchan
+kqL61^Z!
+
+
+
+
+1. adjust image in 2 places
+2. не сбрасывать картинку при возвращ нзад
+3. создавать каталог на каждую сессию
+4. зачищать протухшие сессии
+5. вывести версию софта на главной странице
+6. сделать подгрузку через 1 кнопку
+7. сделать русские надписи
+8. nice to have: подтянуть реальный данные про цены и прочее

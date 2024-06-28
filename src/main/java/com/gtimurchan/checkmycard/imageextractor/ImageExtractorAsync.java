@@ -29,9 +29,9 @@ public class ImageExtractorAsync extends AbstractImageExtractor {
     }
 
     public void execute(String searchString) {
-        boolean emaulate = false;
+        boolean emaulate = true;
 
-        if(emaulate) {
+        if (emaulate) {
             try {
                 Collection<String> imageUrls = emulateImageExtracting();
                 Collection<ImageInfo> images = imageUrls.stream()
@@ -77,7 +77,7 @@ public class ImageExtractorAsync extends AbstractImageExtractor {
     }
 
     public void shutdown() {
-        if(executor != null) {
+        if (executor != null) {
             System.out.printf("Start ImageExtractorAsync::shutdownNow(): " + executor.isShutdown());
             executor.shutdownNow();
             System.out.printf("End ImageExtractorAsync::shutdownNow(): " + executor.isShutdown());

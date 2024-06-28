@@ -36,7 +36,8 @@
         <input type="file" id="imageFile" name="imageFile">
         <button type="button" id="uploadBtn">Upload Image</button>
         <br><br>
-        <img id="thumbnail" src="#" alt="Image Preview" style="display: none;">
+
+        <img id="thumbnail" src="#" alt="Image Preview" style="display: none;" width="244" height="346">
     </form>
 
     <!-- Thumbnail display -->
@@ -44,6 +45,9 @@
 
     <script>
         $(document).ready(function() {
+            console.log("document is ready");
+            updateImageUrl();
+
             $('#uploadBtn').click(function() {
                 var formData = new FormData();
                 var imageFile = $('#imageFile')[0].files[0];
@@ -60,13 +64,43 @@
                        .attr('width', '244')
                        .attr('height', '346')
                        .css('display', 'block');
-                        console.log("Image URL:", data.imageUrl);
+                        console.log("after /upload-image: Image URL:", data.imageUrl);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error uploading image:', error);
                     }
                 });
             });
+        });
+
+        function updateImageUrl() {
+            console.log("start function updateImageUrl()");
+            $.ajax({
+                url: '/get-the-last-image-url',  // Ваш URL для получения изображения
+                type: 'GET',
+                success: function(data) {
+                    if (data.imageUrl) {
+                        $('#thumbnail').attr('src', data.imageUrl).css('display', 'block');
+                    } else {
+                        $('#thumbnail').css('display', 'none');
+                    }
+                    console.log("after updateImageUrl(): Image URL:", data.imageUrl);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching image URL:', error);
+                }
+            });
+        }
+
+        window.addEventListener('pageshow', function(event) {
+            // Проверка, была ли страница загружена из кэша
+            if (event.persisted) {
+                console.log('Page loaded from cache');
+            } else {
+                console.log('Page loaded from server');
+            }
+            // В любом случае, выполняем обновление изображения
+            updateImageUrl();
         });
     </script>
 </body>
