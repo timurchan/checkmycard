@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Upload</title>
+    <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet">
+    <style>
+        #previewContainer {
+            display: flex;
+            align-items: stretch; /* ensure both children have the same height */
+            max-width: 800px;
+            margin-top: 10px;
+        }
+        #cropperContainer,
+        #preview {
+            flex: 1; /* ensure both containers take up equal width */
+            max-width: 400px;
+            max-height: 300px;
+            position: relative;
+        }
+        #preview canvas {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        #cropperImage {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #uploadButton,
+        #cropButton {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<input type="file" id="fileInput" accept="image/*">
+<button id="uploadButton" style="display:none;">Загрузить</button>
+<button id="cropButton" style="display:none;">Посмотреть</button>
+<div id="previewContainer">
+    <div id="cropperContainer">
+        <img id="cropperImage">
+    </div>
+    <div id="preview"></div>
+</div>
+<div class="loading" id="loading" style="display: none;">Loading...</div>
+
+<script src="https://unpkg.com/cropperjs"></script>
+<script>
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const preview = document.getElementById('preview');
+        const cropperContainer = document.getElementById('cropperContainer');
+        const cropperImage = document.getElementById('cropperImage');
+        const uploadButton = document.getElementById('uploadButton');
+        const cropButton = document.getElementById('cropButton');
+        const loading = document.getElementById('loading');
+        let cropper;
+        let originalFileName;
+
+        fileInput.addEventListener('change', function() {
+            const file = fileInput.files[0];
+            originalFileName = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const aspectRatio = img.width / img.height;
+                    if (Math.abs(aspectRatio - 3/4) < 0.01) {
+                        uploadImage(file);
+                    } else {
+                        cropperContainer.style.display = 'block';
+                        cropperImage.src = e.target.result;
+                        cropper = new Cropper(cropperImage, {
+                            aspectRatio: 3 / 4,
+                            ready: function() {
+                                cropButton.style.display = 'block';
+                            }
+                        });
+                    }
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        cropButton.addEventListener('click', function() {
+            const canvas = cropper.getCroppedCanvas();
+            preview.style.display = 'block';
+            preview.innerHTML = '';
+            preview.appendChild(canvas);
+            uploadButton.style.display = 'block';
+        });
+
+        uploadButton.addEventListener('click', function() {
+            const canvas = cropper.getCroppedCanvas();
+            canvas.toBlob(function(blob) {
+                uploadImage(blob);
+            }, 'image/jpeg');
+        });
+
+        function uploadImage(file) {
+            loading.style.display = 'block';
+            const formData = new FormData();
+            formData.append('file', file, originalFileName);
+
+            fetch('/uploadV3', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+              .then(result => {
+                  loading.style.display = 'none';
+                  alert(result);
+              }).catch(error => {
+                  loading.style.display = 'none';
+                  console.error('Error:', error);
+              });
+        }
+    </script>
+</body>
+</html>

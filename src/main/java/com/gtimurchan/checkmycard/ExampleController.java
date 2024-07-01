@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +42,8 @@ public class ExampleController {
     @GetMapping("/")
     public String showInitialForm(Model model) {
 //        model.addAttribute("imageUrl", theLastUploadedImageFilePath);
-        return "index"; // Ensure this matches the Thymeleaf template name (index.html)
+//        return "index";
+        return "indexV4";
     }
 
     @GetMapping("/get-the-last-image-url")
@@ -125,6 +128,58 @@ public class ExampleController {
         theLastUploadedImageFilePath = fileNameOnServer;
         return new ImageResponse(theLastUploadedImageFilePath);
     }
+
+    @PostMapping("/uploadV3")
+    @ResponseBody
+    public ResponseEntity<?> handleFileUploadV3(@RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
+        String sessionId = session.getId();
+
+        // Create a unique directory for the user
+        File userUploadDir = new File(uploadDirectory + File.separator + sessionId);
+        if (!userUploadDir.exists()) {
+            userUploadDir.mkdirs();
+        }
+
+        // Save the uploaded file
+        String originalFileName = file.getOriginalFilename();
+        String tempFilePrefix = "upload_";
+        String tempFileSuffix = "_" + originalFileName;
+        Path tempFilePath = Files.createTempFile(tempFilePrefix, tempFileSuffix);
+        file.transferTo(tempFilePath.toFile());
+
+        // Read the image from the temporary file
+        BufferedImage image = ImageIO.read(tempFilePath.toFile());
+        if (image == null) {
+            Files.delete(tempFilePath);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Ошибка: неверный формат изображения.");
+            return ResponseEntity.ok(response);
+        }
+
+        // Define the final file path
+        String finalFileName = "processed_" + originalFileName;
+        Path finalFilePath = Paths.get(userUploadDir.getAbsolutePath(), finalFileName);
+
+        String fileNameOnServer = "/" + sessionId + "/" + finalFileName;
+        System.out.println("return fileNameOnServer : " + fileNameOnServer);
+
+        theLastUploadedImageFilePath = fileNameOnServer;
+
+        // Save the processed image to the final file
+        File outputFile = new File(finalFilePath.toString());
+        ImageIO.write(image, "jpg", outputFile);
+
+        // Delete the temporary file
+        Files.delete(tempFilePath);
+
+        // Возвращаем URL в JSON формате
+        Map<String, String> response = new HashMap<>();
+        response.put("imageUrl", fileNameOnServer);
+        response.put("message", "Файл загружен успешно");
+
+        return ResponseEntity.ok(response);
+    }
+
 
     public static class ImageResponse {
         private String imageUrl;
